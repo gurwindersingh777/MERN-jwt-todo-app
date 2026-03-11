@@ -2,9 +2,15 @@ import { ErrorRequestHandler, Response } from "express";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from "../constants/statusCode.js";
 import { z } from "zod";
 import ApiError from "../utils/ApiError.js";
+import { REFRESH_PATH } from "../constants/refreshPath.js";
+import { clearAuthCookies } from "../utils/cookies.js";
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.log(`PATH : ${req.path}`, err);
+  console.log(`PATH : ${req.path}  error : ${err.message}`);
+
+  if (req.path === REFRESH_PATH) {
+    clearAuthCookies(res)
+  }
 
   if (err instanceof z.ZodError) {
 

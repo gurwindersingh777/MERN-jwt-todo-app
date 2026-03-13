@@ -1,7 +1,7 @@
 import { CREATED, OK, UNAUTHORIZED } from "../constants/statusCode.js"
 import { SessionModel } from "../models/session.model.js"
-import { loginSchema, registerSchema } from "../schema/auth.schema.js"
-import { loginUser, refreshAccessToken, registerUser } from "../services/auth.service.js"
+import { emailSchema, loginSchema, registerSchema, resetPasswordSchema, verificationCodeSchema } from "../schema/auth.schema.js"
+import { loginUser, refreshAccessToken, registerUser, resetPassword, sendPasswordResetEmail, verifyEmail } from "../services/auth.service.js"
 import ApiError from "../utils/ApiError.js"
 import AsyncHandler from "../utils/AsyncHandler.js"
 import { clearAuthCookies, getAccessTokenCookieOptions, getRefreshTokenCookieOptions, setAuthCookies } from "../utils/cookies.js"
@@ -82,9 +82,54 @@ const refreshHandler = AsyncHandler(
   }
 )
 
+const verifyEmailHandler = AsyncHandler(
+  async (req, res) => {
+    const verificationCode = verificationCodeSchema.parse(req.params.code);
+
+    const { user } = await verifyEmail(verificationCode)
+
+    return res.status(OK).json(
+      {
+        user,
+        message: "Email verified successfully"
+      }
+    )
+  }
+)
+
+const forgetPasswordHandler = AsyncHandler(
+  async (req, res) => {
+    
+    const email = emailSchema.parse(req.body.email)
+
+    await sendPasswordResetEmail(email)
+
+    return res.status(OK).json({
+      message: "Password reset email sent"
+    })
+  }
+)
+
+const resetPassworHandler = AsyncHandler(
+  async (req, res) => {
+    const request = resetPasswordSchema.parse(req.body)
+
+    await resetPassword(request)
+
+    clearAuthCookies(res)
+
+    return res.status(OK).json({
+      message: "Password reset successfully"
+    })
+  }
+)
+
 export {
   registerHandler,
   loginHandler,
   logoutHandler,
-  refreshHandler
+  refreshHandler,
+  verifyEmailHandler,
+  forgetPasswordHandler,
+  resetPassworHandler
 }

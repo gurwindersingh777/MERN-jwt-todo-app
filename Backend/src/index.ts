@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { errorHandler } from './middleware/errorHandler.js'
 import { OK } from './constants/statusCode.js'
+import authenticate from './middleware/authenticate.js'
 
 const app = express()
 
@@ -21,8 +22,12 @@ app.get("/health", (req, res, next) => {
 
 // routes
 import authRouter from "./routes/auth.routes.js"
+import userRouter from './routes/user.routes.js'
+import sessionRouter from './routes/session.routes.js'
 
 app.use("/auth", authRouter)
+app.use("/user", authenticate, userRouter)
+app.use("/sessions", authenticate, sessionRouter)
 app.use(errorHandler)
 
 connectToDB().then(() => {

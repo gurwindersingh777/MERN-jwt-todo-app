@@ -19,9 +19,8 @@ export const generateTokens = (userId: string, sessionId: string) => {
 }
 
 export const verifyToken = (token: string): JwtPayload => {
-
   try {
-    return jwt.verify(token, JWT_REFRESH_SECRET) as JwtPayload
+    return jwt.verify(token, JWT_ACCESS_SECRET) as JwtPayload
   } catch (error) {
     throw new Error("Invalid or expired token")
   }

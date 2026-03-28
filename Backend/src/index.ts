@@ -24,10 +24,12 @@ app.get("/health", (req, res, next) => {
 import authRouter from "./routes/auth.routes.js"
 import userRouter from './routes/user.routes.js'
 import sessionRouter from './routes/session.routes.js'
+import todoRouter from './routes/todo.routes.js'
 
 app.use("/auth", authRouter)
 app.use("/user", authenticate, userRouter)
 app.use("/sessions", authenticate, sessionRouter)
+app.use("/todo", authenticate, todoRouter)
 app.use(errorHandler)
 
 connectToDB().then(() => {

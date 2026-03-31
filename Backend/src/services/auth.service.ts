@@ -162,7 +162,7 @@ async function sendPasswordResetEmail(email: string) {
   const user = await UserModel.findOne({ email })
 
   if (!user) {
-    throw new ApiError(NOT_FOUND, "User not found")
+    throw new ApiError(UNAUTHORIZED, "Invalid email")
   }
 
   const count = await VerificationCodeModel.countDocuments({
@@ -171,7 +171,7 @@ async function sendPasswordResetEmail(email: string) {
     createdAt: { $gt: fiveMinsAgo() }
   })
 
-  if (count <= 1) {
+  if (count > 1) {
     throw new ApiError(TOO_MANY_REQUEST, "Too many request, please try again later")
   }
 

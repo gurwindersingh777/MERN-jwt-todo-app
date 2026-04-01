@@ -99,7 +99,7 @@ const verifyEmailHandler = AsyncHandler(
 
 const forgetPasswordHandler = AsyncHandler(
   async (req, res) => {
-    
+
     const email = emailSchema.parse(req.body.email)
 
     await sendPasswordResetEmail(email)

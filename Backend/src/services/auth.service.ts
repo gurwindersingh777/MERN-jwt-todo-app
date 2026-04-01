@@ -181,7 +181,7 @@ async function sendPasswordResetEmail(email: string) {
     expiresAt: oneHourFromNow()
   })
 
-  const url = `${CORS_ORIGIN}/password/forgot/${verificationCode._id}`
+  const url = `${CORS_ORIGIN}/password/reset?code=${verificationCode._id}&exp=${verificationCode.expiresAt.getTime()}`
 
   const { data, error } = await sendMail({ to: user.email, ...getPasswordResetTemplate(url) })
 

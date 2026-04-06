@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { getUser } from "../api/auth.api"
 
-const AUTH = "auth"
+export const AUTH = "auth"
 
 export const useAuth = (options = {}) => {
   const { data: user, ...rest } = useQuery({
@@ -10,6 +10,6 @@ export const useAuth = (options = {}) => {
     staleTime: Infinity,
     ...options
   })
-
+  
   return { user, ...rest }
 }

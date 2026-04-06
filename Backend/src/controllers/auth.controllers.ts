@@ -1,3 +1,4 @@
+import { JWT_ACCESS_SECRET } from "../constants/env.js"
 import { CREATED, OK, UNAUTHORIZED } from "../constants/statusCode.js"
 import { SessionModel } from "../models/session.model.js"
 import { emailSchema, loginSchema, registerSchema, resetPasswordSchema, verificationCodeSchema } from "../schema/auth.schema.js"
@@ -43,7 +44,7 @@ const logoutHandler = AsyncHandler(
 
   async (req, res) => {
     const accessToken: string = req.cookies.accessToken as string
-    const payload = verifyToken(accessToken);
+    const payload = verifyToken(accessToken, JWT_ACCESS_SECRET);
 
     if (payload) {
       await SessionModel.findByIdAndDelete(payload.sessionId)

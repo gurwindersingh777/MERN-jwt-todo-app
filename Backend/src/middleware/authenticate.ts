@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import ApiError from "../utils/ApiError.js";
 import { UNAUTHORIZED } from "../constants/statusCode.js";
 import { verifyToken } from "../utils/jwt.js";
+import { JWT_ACCESS_SECRET } from "../constants/env.js";
 
 
 const authenticate: RequestHandler = (req, res, next) => {
@@ -13,7 +14,7 @@ const authenticate: RequestHandler = (req, res, next) => {
   }
 
   try {
-    const payload = verifyToken(accessToken);
+    const payload = verifyToken(accessToken,JWT_ACCESS_SECRET);
     req.userId = payload.userId
     req.sessionId = payload.sessionId
     next()

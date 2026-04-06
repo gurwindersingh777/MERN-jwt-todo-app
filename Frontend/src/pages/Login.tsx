@@ -1,18 +1,23 @@
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { login } from "../api/auth.api";
+import { queryClient } from "../config/queryClient";
+import { AUTH } from "../hooks/useAuth";
 
 export default function Login() {
 
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const navigate = useNavigate()
+  const location = useLocation()
+  const redirectUrl = location.state?.redirectUrl || "/"
 
   const { mutate: signin, isError, isPending } = useMutation({
     mutationFn: login,
-    onSuccess: () => {
-      navigate("/", { replace: true })
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [AUTH] })
+      navigate(redirectUrl, { replace: true })
     },
   })
 

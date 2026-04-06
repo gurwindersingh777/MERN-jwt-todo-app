@@ -1,4 +1,4 @@
-import { CORS_ORIGIN } from "../constants/env.js"
+import { CORS_ORIGIN, JWT_REFRESH_SECRET } from "../constants/env.js"
 import { CONFLICT, INTERNAL_SERVER_ERROR, NOT_FOUND, TOO_MANY_REQUEST, UNAUTHORIZED } from "../constants/statusCode.js"
 import { VerificationType } from "../constants/verificationType.js"
 import { SessionModel } from "../models/session.model.js"
@@ -102,7 +102,7 @@ async function loginUser(data: LoginUserProps) {
 
 async function refreshAccessToken(token: string) {
 
-  const payload = verifyToken(token)
+  const payload = verifyToken(token, JWT_REFRESH_SECRET)
 
   if (!payload) {
     throw new ApiError(UNAUTHORIZED, "Invalid refresh token")

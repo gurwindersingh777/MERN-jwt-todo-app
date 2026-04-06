@@ -7,7 +7,7 @@ import { REFRESH_PATH } from "../constants/refreshPath.js"
 const cookieOptions: CookieOptions = {
   secure: NODE_ENV === "production",
   httpOnly: true,
-  sameSite: "strict",
+  sameSite: NODE_ENV === "production" ? "none" : "lax",
 }
 
 export const getAccessTokenCookieOptions = (): CookieOptions => (

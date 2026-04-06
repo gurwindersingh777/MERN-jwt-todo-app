@@ -18,9 +18,9 @@ export const generateTokens = (userId: string, sessionId: string) => {
   return { accessToken, refreshToken }
 }
 
-export const verifyToken = (token: string): JwtPayload => {
+export const verifyToken = (token: string, secret: string): JwtPayload => {
   try {
-    return jwt.verify(token, JWT_ACCESS_SECRET) as JwtPayload
+    return jwt.verify(token, secret) as JwtPayload
   } catch (error) {
     throw new Error("Invalid or expired token")
   }
